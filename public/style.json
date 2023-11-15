@@ -8046,7 +8046,6 @@
       "id": "takamatsu-shelters",
       "type": "circle",
       "source": "takamatsu-shelters",
-      "filter": [">=", ["to-number", ["get", "capacity"]], 700],
       "paint": {
         "circle-radius": 10,
         "circle-color": "#ff0000",
