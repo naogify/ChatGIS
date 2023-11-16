@@ -1,5 +1,6 @@
 import OpenAI from 'openai';
 import style from '../public/style.json';
+import shelters from '../public/shelters.json';
 
 const openai = new OpenAI({
   apiKey: process.env["OPENAI_API_KEY"]
@@ -18,7 +19,11 @@ const getStyleArguments = async (input) => {
     setPaintProperty を使う場合は、引数となる layerId、name、value の適切な値と functionType: setPaintProperty を返して下さい。
 
     setFilter を使う場合は、引数となる layerId、filter の適切な値と functionType: setFilter を返して下さい。
-    setFilter で数値を使う場合は、['to-number', value] を使用して、数値に変換して下さい。
+    setFilter で比較演算子を使う場合は、['to-number', value] を使用して、数値に変換して下さい。
+    setFilter を使う場合は以下の GeoJSON を分析して、適切な filter を返して下さい。
+
+    以下が GeoJSON です:
+    ${JSON.stringify(shelters)}
 
     アシスタントの回答は日本語で返して下さい。
 
@@ -26,7 +31,8 @@ const getStyleArguments = async (input) => {
     ${input}
 
     以下 が style.json です:
-    ${JSON.stringify(style)}`
+    ${JSON.stringify(style)}
+    `
     },
   ];
   const tools = [
@@ -75,6 +81,8 @@ const getStyleArguments = async (input) => {
   const responseMessage = response.choices[0].message;
 
   if (responseMessage.tool_calls) {
+
+    console.log(responseMessage.tool_calls[0].function.arguments)
 
     return JSON.parse(responseMessage.tool_calls[0].function.arguments);
   }

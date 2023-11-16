@@ -63,19 +63,28 @@ export default function Home() {
 
       const { layerId, name, value, filter, functionType } = data;
 
+      console.log({functionType})
+      console.log({filter})
+      console.log({layerId})
+      console.log({name})
+      console.log({value})
+
       if (functionType !== null) {
         const style = mapObject.getStyle();
         const layer = style.layers.find((layer) => layer.id === layerId);
         const paint = layer.paint;
 
-        const filterValue = filter ? filter : null;
+        const filterValue = filter ? JSON.parse(filter) : null;
 
         if (functionType === "setPaintProperty") {
           paint[name] = value;
           mapObject.setPaintProperty(layerId, name, value);
         } else if (functionType === "setFilter") {
 
+          console.log(filterValue)
           mapObject.setFilter(layerId, filterValue);
+
+          console.log(mapObject.getFilter(layerId))
         }
 
         mapObject.setLayoutProperty(layerId, "visibility", "visible");
